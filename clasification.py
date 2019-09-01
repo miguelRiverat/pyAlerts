@@ -63,7 +63,8 @@ def calcPres(listArr, listdates, present, clase_ter, corp, prod, fecha_lan, mole
 
 
 client = storage.Client()
-blob = client.get_bucket('sanfer_alerts')
+bucket = client.get_bucket('sanfer_alerts')
+
 
 now = datetime.now()
 print("date and time =", now.strftime("%d/%m/%Y %H:%M:%S"))
@@ -151,8 +152,8 @@ with open(finalname, 'wb') as outfile:
         os.remove(filename)
 
 line_prepender(finalname, 'tendencia;claseterapeutica;corporacion;producto;fechalanzamiento;presentacion;moleculan1;fecini;fecend;tipo')
-with open(finalname, 'rb') as uploadFile:
-    blob.upload_from_file(uploadFile)
+blob = bucket.blob('mth.csv')
+blob.upload_from_filename(finalname)
 
 now = datetime.now()
 print("date and time =", now.strftime("%d/%m/%Y %H:%M:%S"))
