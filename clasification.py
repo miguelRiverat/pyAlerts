@@ -152,7 +152,7 @@ with open(finalname, 'wb') as outfile:
         os.remove(filename)
 
 line_prepender(finalname, 'tendencia;claseterapeutica;corporacion;producto;fechalanzamiento;presentacion;moleculan1;fecini;fecend;tipo')
-blob = bucket.blob('mth.csv')
+blob = bucket.blob('2019-09-01__mth.csv')
 blob.upload_from_filename(finalname)
 
 now = datetime.now()

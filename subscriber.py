@@ -1,6 +1,10 @@
 import time
 from google.cloud import pubsub_v1
-from clasification import init
+import os
+
+startEngine = 'gcloud compute instances start --zone "us-central1-a" "instance-1"'
+stopEngine = 'gcloud compute instances stop --zone "us-central1-a" "instance-1"'
+runClasification = """gcloud beta compute --project "prime-principle-243417" ssh --zone "us-central1-a" "instance-1" --command='python -c "x=2; y=3; print(x+y)"'"""
 
 project_id = "prime-principle-243417"
 subscription_name = "py_subs"
@@ -14,7 +18,9 @@ subscription_path = subscriber.subscription_path(
 def callback(message):
     message.ack()
     print('Received message: {}'.format(message))
-    init()
+    os.system(startEngine)
+    os.system(runClasification)
+    os.system(stopEngine)
     
 subscriber.subscribe(subscription_path, callback=callback)
 
