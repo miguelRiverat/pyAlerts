@@ -9,6 +9,7 @@ import numpy as np
 import shutil
 import os
 import glob
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/miguel/google/cred.json"
 
 def line_prepender(filename, line):
     with open(filename, 'r+') as f:
@@ -41,7 +42,7 @@ def calcPres(listArr, listdates, present, clase_ter, corp, prod, fecha_lan, mole
 
     listing.sort(key=lambda x: x[2])
 
-    file = open("./csv/alerts_{}.csv".format(present.replace('/','').replace('%','').replace('.','').replace(' ','')),"w+")
+    file = open("/home/miguel/pyAlerts/csv/alerts_{}.csv".format(present.replace('/','').replace('%','').replace('.','').replace(' ','')),"w+")
 
     for index, li in enumerate(listing):
         if (index % 4 == 0 and index != 0 ):
@@ -120,10 +121,10 @@ for index, row in df_clases.iterrows():
         proc.join()
 
 
-    nameFile = './clases/{}.csv'.format(clase)
+    nameFile = '/home/miguel/pyAlerts/clases/{}.csv'.format(clase)
 
     with open(nameFile, 'wb') as outfile:
-        for filename in glob.glob('./csv/*.csv'):
+        for filename in glob.glob('/home/miguel/pyAlerts/csv/*.csv'):
             with open(filename, 'rb') as readfile:
                 shutil.copyfileobj(readfile, outfile)
             os.remove(filename)
@@ -142,17 +143,17 @@ for index, row in df_clases.iterrows():
             maxi = combin['tendencia'].value_counts().index[0]
             data.loc[index, "tipo"] = '{}, por demanda'.format(maxi)
 
-    data.to_csv('./process/{}.csv'.format(clase), sep=';', index=False, header=False)
+    data.to_csv('/home/miguel/pyAlerts/process/{}.csv'.format(clase), sep=';', index=False, header=False)
     os.remove(nameFile)
-finalname = './final/mth.csv'
+finalname = '/home/miguel/pyAlerts/final/mth.csv'
 with open(finalname, 'wb') as outfile:
-    for filename in glob.glob('./process/*.csv'):
+    for filename in glob.glob('/home/miguel/pyAlerts/process/*.csv'):
         with open(filename, 'rb') as readfile:
             shutil.copyfileobj(readfile, outfile)
         os.remove(filename)
 
 line_prepender(finalname, 'tendencia;claseterapeutica;corporacion;producto;fechalanzamiento;presentacion;moleculan1;fecini;fecend;tipo')
-blob = bucket.blob('2019-09-01__mth.csv')
+blob = bucket.blob('mth.csv')
 blob.upload_from_filename(finalname)
 
 now = datetime.now()

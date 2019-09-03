@@ -1,4 +1,5 @@
 import time
+
 from google.cloud import pubsub_v1
 import os
 
@@ -16,12 +17,9 @@ subscription_path = subscriber.subscription_path(
     project_id, subscription_name)
 
 def callback(message):
-    message.ack()
     print('Received message: {}'.format(message))
-    os.system(startEngine)
-    os.system(runClasification)
-    os.system(stopEngine)
-    
+    message.ack()
+
 subscriber.subscribe(subscription_path, callback=callback)
 
 # The subscriber is non-blocking. We must keep the main thread from
@@ -29,6 +27,7 @@ subscriber.subscribe(subscription_path, callback=callback)
 print('Listening for messages on {}'.format(subscription_path))
 while True:
     time.sleep(60)
+    
 
 
 
